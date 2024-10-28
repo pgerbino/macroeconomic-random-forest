@@ -23,3 +23,11 @@ bank_rate = bank_rate.resample('MS').ffill()
 
 
 inflation_government_exp_bank_df = inflation_government_exp_df.join(bank_rate, how='inner')
+
+employment = pd.read_csv('./employment.csv', index_col=0, skiprows=8)
+employment = employment[employment.index.str.match(r'^\d{4} [A-Z]{3}$')]
+employment.columns = ['employment']
+employment.index = pd.to_datetime(employment.index, format='mixed')
+employment.index.name = 'date'
+
+inflation_government_exp_bank_emp_df = inflation_government_exp_bank_df.join(employment, how='inner')
