@@ -31,3 +31,14 @@ employment.index = pd.to_datetime(employment.index, format='mixed')
 employment.index.name = 'date'
 
 inflation_government_exp_bank_emp_df = inflation_government_exp_bank_df.join(employment, how='inner')
+
+
+balance_of_payments = pd.read_csv('./balance_of_payments.csv', index_col=0, skiprows=8)
+balance_of_payments = balance_of_payments[balance_of_payments.index.str.match(r'^\d{4} [A-Z]{3}$')]
+balance_of_payments.columns = ['balance_of_payments']
+balance_of_payments.index = pd.to_datetime(balance_of_payments.index, format='mixed')
+balance_of_payments.index.name = 'date'
+
+final_df = inflation_government_exp_bank_emp_df.join(balance_of_payments, how='inner')
+
+final_df.to_csv('./final_dataset.csv')
