@@ -44,6 +44,23 @@ def download_monthly_gdp_dataset():
     else:
         print(f"Failed to download the dataset. Status code: {response.status_code}")
 
+def download_inflation_dataset():
+    # URL for the consumer price inflation dataset CSV
+    url = "https://www.ons.gov.uk/file?uri=/economy/inflationandpriceindices/datasets/consumerpriceindices/current/mm23.csv"
+
+    # Send a GET request to the URL
+    response = requests.get(url)
+
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Read the CSV file from the response content
+        df = pd.read_csv(io.StringIO(response.content.decode('utf-8')))
+        
+        # Save the DataFrame to a CSV file
+        df.to_csv("inflation_dataset.csv", index=False)
+        print("Inflation dataset downloaded and saved as 'inflation_dataset.csv'")
+    else:
+        print(f"Failed to download the dataset. Status code: {response.status_code}")
 
 
 if __name__ == '__main__':
@@ -51,3 +68,5 @@ if __name__ == '__main__':
     download_a01_dataset()
     # Call the function to download the dataset
     download_monthly_gdp_dataset()
+    # Call the function to download the dataset
+    download_inflation_dataset()
