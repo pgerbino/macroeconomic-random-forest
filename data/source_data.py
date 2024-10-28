@@ -1,72 +1,61 @@
-# purpose of this file is to download the raw data need for modelling
+# Purpose: This script downloads raw datasets needed for modeling
 import requests
 import pandas as pd
 import io
 
-def download_a01_dataset():
-    # URL for the A01 dataset
-    url = "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/summaryoflabourmarketstatistics/current"
-
-    url = "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/summaryoflabourmarketstatistics/current/a01oct2024.xls"
+def download_dataset(url, file_name, file_type='csv', sheet_name=None):
     # Send a GET request to the URL
     response = requests.get(url)
 
     # Check if the request was successful
     if response.status_code == 200:
-        # Read the Excel file from the response content
-        df = pd.read_excel(io.BytesIO(response.content), sheet_name="1", engine="xlrd")
+        if file_type == 'excel':
+            # Read the Excel file from the response content
+            df = pd.read_excel(io.BytesIO(response.content), sheet_name=sheet_name, engine='xlrd')
+        elif file_type == 'csv':
+            # Read the CSV file from the response content
+            df = pd.read_csv(io.StringIO(response.content.decode('utf-8')))
+        else:
+            print(f"Unsupported file type: {file_type}")
+            return
         
         # Save the DataFrame to a CSV file
-        df.to_csv("a01_dataset.csv", index=False)
-        print("A01 dataset downloaded and saved as 'a01_dataset.csv'")
+        df.to_csv(file_name, index=False)
+        print(f"Dataset downloaded and saved as '{file_name}'")
     else:
         print(f"Failed to download the dataset. Status code: {response.status_code}")
-
-import requests
-import pandas as pd
-import io
-
-def download_monthly_gdp_dataset():
-    # URL for the monthly GDP dataset CSV
-    url = "https://www.ons.gov.uk/file?uri=/economy/grossdomesticproductgdp/datasets/gdpmonthlyestimateuktimeseriesdataset/current/mgdp.csv"
-
-    # Send a GET request to the URL
-    response = requests.get(url)
-
-    # Check if the request was successful
-    if response.status_code == 200:
-        # Read the CSV file from the response content
-        df = pd.read_csv(io.StringIO(response.content.decode('utf-8')))
-        
-        # Save the DataFrame to a CSV file
-        df.to_csv("monthly_gdp_dataset.csv", index=False)
-        print("Monthly GDP dataset downloaded and saved as 'monthly_gdp_dataset.csv'")
-    else:
-        print(f"Failed to download the dataset. Status code: {response.status_code}")
-
-def download_inflation_dataset():
-    # URL for the consumer price inflation dataset CSV
-    url = "https://www.ons.gov.uk/file?uri=/economy/inflationandpriceindices/datasets/consumerpriceindices/current/mm23.csv"
-
-    # Send a GET request to the URL
-    response = requests.get(url)
-
-    # Check if the request was successful
-    if response.status_code == 200:
-        # Read the CSV file from the response content
-        df = pd.read_csv(io.StringIO(response.content.decode('utf-8')))
-        
-        # Save the DataFrame to a CSV file
-        df.to_csv("inflation_dataset.csv", index=False)
-        print("Inflation dataset downloaded and saved as 'inflation_dataset.csv'")
-    else:
-        print(f"Failed to download the dataset. Status code: {response.status_code}")
-
 
 if __name__ == '__main__':
-    # Call the function to download the dataset
-    download_a01_dataset()
-    # Call the function to download the dataset
-    download_monthly_gdp_dataset()
-    # Call the function to download the dataset
-    download_inflation_dataset()
+    # Define dataset URLs and details
+    datasets = [
+        {
+            'url': "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/summaryoflabourmarketstatistics/current/a01oct2024.xls",
+            'file_name': "a01_dataset.csv",
+            'file_type': 'excel',
+            'sheet_name': '1'
+        },
+        {
+            'url': "https://www.ons.gov.uk/file?uri=/economy/grossdomesticproductgdp/datasets/gdpmonthlyestimateuktimeseriesdataset/current/mgdp.csv",
+            'file_name': "monthly_gdp_dataset.csv",
+            'file_type': 'csv'
+        },
+        {
+            'url': "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l55o/mm23",
+            'file_name': "monthly_inflation_dataset.csv",
+            'file_type': 'csv'
+        },
+        {
+            'url': "https://www.ons.gov.uk/file?uri=/economy/governmentpublicsectorandtaxes/publicsectorfinance/datasets/publicsectorfinances/current/pusf.csv",
+            'file_name' : "government_spending.csv",
+            'file_type' : 'csv'
+        }
+    ]
+
+    # Download each dataset
+    for dataset in datasets:
+        download_dataset(
+            url=dataset['url'],
+            file_name=dataset['file_name'],
+            file_type=dataset['file_type'],
+            sheet_name=dataset.get('sheet_name')
+        )
