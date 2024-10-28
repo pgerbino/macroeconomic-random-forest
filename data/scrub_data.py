@@ -34,11 +34,29 @@ inflation_government_exp_bank_emp_df = inflation_government_exp_bank_df.join(emp
 
 
 balance_of_payments = pd.read_csv('./balance_of_payments.csv', index_col=0, skiprows=8)
-balance_of_payments = balance_of_payments[balance_of_payments.index.str.match(r'^\d{4} [A-Z]{3}$')]
+balance_of_payments = balance_of_payments[balance_of_payments.index.str.match(r'^\d{4} Q[1-4]$')]
 balance_of_payments.columns = ['balance_of_payments']
+balance_of_payments.index = balance_of_payments.index.str.replace(r'Q1', '01-01')
+balance_of_payments.index = balance_of_payments.index.str.replace(r'Q2', '04-01')
+balance_of_payments.index = balance_of_payments.index.str.replace(r'Q3', '07-01')
+balance_of_payments.index = balance_of_payments.index.str.replace(r'Q4', '10-01')
 balance_of_payments.index = pd.to_datetime(balance_of_payments.index, format='mixed')
 balance_of_payments.index.name = 'date'
+balance_of_payments = balance_of_payments.resample('MS').ffill()
 
-final_df = inflation_government_exp_bank_emp_df.join(balance_of_payments, how='inner')
+not_quite_final_df = inflation_government_exp_bank_emp_df.join(balance_of_payments, how='inner')
+
+gdp = pd.read_csv('./gdp.csv', index_col=0, skiprows=8)
+gdp = gdp[gdp.index.str.match(r'^\d{4} Q[1-4]$')]
+gdp.columns = ['gdp']
+gdp.index = gdp.index.str.replace(r'Q1', '01-01')
+gdp.index = gdp.index.str.replace(r'Q2', '04-01')
+gdp.index = gdp.index.str.replace(r'Q3', '07-01')
+gdp.index = gdp.index.str.replace(r'Q4', '10-01')
+gdp.index = pd.to_datetime(gdp.index, format='mixed')
+gdp.index.name = 'date'
+gdp = gdp.resample('MS').ffill()
+
+final_df = not_quite_final_df.join(gdp, how='inner')
 
 final_df.to_csv('./final_dataset.csv')
