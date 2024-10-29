@@ -9,6 +9,7 @@ Looks like with python 3.13 and the required libraries that some work was needed
 3. need to model just three variables using the MRF framework and see if it works with the changes actioned - employment, inflation, interest rates vs gdp and include government spending as the exogenous variable done
 3a. the bands don't make sense - need to analyse that code and see what it's doing
 3b. plot the actual dat versus the mrf modelling
+3c. yep the variables aren't enough think the docs oversell what this can do?
 4. get simple streamlit ui to selec the variables of interest
 6. plot graph of actual versus mrf 
 7. One we have the bands we need to ask llm to comment on them
