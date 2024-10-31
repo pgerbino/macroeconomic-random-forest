@@ -10,6 +10,10 @@ Looks like with python 3.13 and the required libraries that some work was needed
 3a. the bands don't make sense - need to analyse that code and see what it's doing
 3b. plot the actual dat versus the mrf modelling
 3c. yep the variables aren't enough think the docs oversell what this can do?
-4. get simple streamlit ui to selec the variables of interest
+3c.a. leaving modelling to one side as llms are going to help with this
+4. get simple streamlit ui to select and preprocess the variables of interest
+4a. hwo does it use pyarrow?
+4b. run as 
+```streamlit run simple_streamlit.py```
 6. plot graph of actual versus mrf 
 7. One we have the bands we need to ask llm to comment on them
