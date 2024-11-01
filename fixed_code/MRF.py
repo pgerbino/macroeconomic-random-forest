@@ -234,7 +234,7 @@ class MacroRandomForest:
 
         self.avg_beta_nonOVF = self.avg_beta
 
-        self.forest = []
+        self.forest = {}
 
         self.random_vecs = []
 
@@ -275,8 +275,8 @@ class MacroRandomForest:
 
             rando_vec = rt_output["rando_vec"]
             if self.keep_forest:
-                self.forest[[b]] = rt_output['tree']
-                self.random_vec[[b]] = rando_vec
+                self.forest[b] = rt_output['tree']
+                # self.random_vec[b] = rando_vec
 
             self.commitee[b, :] = rt_output['pred'].reshape(-1)
             self.avg_pred = pd.DataFrame(self.commitee).mean(axis=0)
@@ -773,6 +773,8 @@ class MacroRandomForest:
 
             z_T = z.T
 #            b0 = np.linalg.solve(z_T @ z + reg_mat, z_T@y.T)
+# can return a 1x1 matrix, which is not what we want
+
             b0 = np.linalg.solve(z_T @ z + reg_mat, z_T@y)
 
         else:
