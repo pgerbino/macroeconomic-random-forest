@@ -21,7 +21,8 @@ def generate_sample_data():
 st.title("Macroeconomic Random Forest Parameter Selection")
 
 # Generate and display the sample dataframe
-df = generate_sample_data()
+# df = generate_sample_data()
+df = pd.read_csv('./csvs/final_dataset.csv', index_col=0)
 st.subheader("Sample Macroeconomic Data")
 st.dataframe(df.head())
 
