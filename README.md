@@ -20,5 +20,6 @@ Looks like with python 3.13 and the required libraries that some work was needed
 4c.a.1 convert absolute values to relative and add as columns
 4c.a.2 use interpolation
 4c.a.3 lagged variables
+4c.a.4 model up until pandemic as it throws all the figures off
 5. plot graph of actual versus mrf 
 6. One we have the bands we need to ask llm to comment on them
