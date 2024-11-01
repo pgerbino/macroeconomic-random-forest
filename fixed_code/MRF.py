@@ -275,7 +275,7 @@ class MacroRandomForest:
 
             rando_vec = rt_output["rando_vec"]
             if self.keep_forest:
-                self.forest[b] = rt_output['tree']
+                self.forest[b] = rt_output['fit']
                 # self.random_vec[b] = rando_vec
 
             self.commitee[b, :] = rt_output['pred'].reshape(-1)
@@ -727,7 +727,6 @@ class MacroRandomForest:
         min_frac_times_no_cols = self.min_leaf_fracz*z.shape[1]
 
         y_as_list = np.array(y)
-        # not sure why this has become a problem
         # y = np.matrix(y)
 
         sse = np.repeat(np.inf, repeats=len(uni_x), axis=0)
