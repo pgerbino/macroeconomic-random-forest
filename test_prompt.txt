@@ -1,0 +1,3 @@
+I am modelling detrended and normalized gdp growth which is the first column in the dataframe against the dependent variables. These are all betas from a regression model and time varying. provide a high level and thematic description of the data.
+
+How do the dependent variables vary with each other - provide high level commentary
