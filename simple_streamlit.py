@@ -46,6 +46,7 @@ if dependent_vars and independent_var:
             # Placeholder for model results
             st.write("Running the model...")
             # Call the function to run the model
+            # TODO interface
             run_model(df, independent_var, dependent_vars)
 
 # Add a note about next steps
