@@ -1,28 +1,15 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
+from .simple_mrf import run_model
 
-# Generate sample macroeconomic data
-def generate_sample_data():
-    np.random.seed(0)
-    data = {
-        'GDP_Growth': np.random.normal(2, 1, 100),
-        'Inflation_Rate': np.random.normal(2.5, 0.5, 100),
-        'Unemployment_Rate': np.random.normal(5, 1, 100),
-        'Interest_Rate': np.random.normal(3, 0.5, 100),
-        'Exchange_Rate': np.random.normal(1, 0.1, 100),
-        'Consumer_Confidence': np.random.normal(100, 10, 100),
-        'Industrial_Production': np.random.normal(3, 1, 100),
-        'Stock_Market_Index': np.random.normal(10000, 500, 100)
-    }
-    return pd.DataFrame(data)
 
 # Create the Streamlit app
 st.title("Macroeconomic Random Forest Parameter Selection")
 
 # Generate and display the sample dataframe
 # df = generate_sample_data()
-df = pd.read_csv('./csvs/final_dataset.csv', index_col=0)
+df = pd.read_csv('./csvs/detrended_scaled_dataset.csv', index_col=0)
+# TODO does this contain the scaled and detrended data?
 st.subheader("Sample Macroeconomic Data")
 st.dataframe(df.head())
 
@@ -52,6 +39,14 @@ if dependent_vars and independent_var:
     for dep_var in dependent_vars:
         st.write(f"{dep_var} vs {independent_var}")
         st.scatter_chart(df[[independent_var, dep_var]])
+
+        # Add a button to run the model
+        if st.button("Run Model"):
+            st.subheader("Model Results")
+            # Placeholder for model results
+            st.write("Running the model...")
+            # Call the function to run the model
+            run_model(df, independent_var, dependent_vars)
 
 # Add a note about next steps
 st.markdown("""
